@@ -6,7 +6,6 @@ import org.khasanof.authservice.dto.BaseDTO;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
-import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -38,9 +37,15 @@ public class StudentCreateDTO implements BaseDTO {
     @NotBlank(message = "{student.parentId.required}")
     private int parentId;
 
+    @NotBlank(message = "{student.dateOfJoin.required}")
+    private String dateOfJoin;
 
-    private LocalDateTime dateOfJoin;
     private boolean status;
-    private LocalDateTime lastLoginDate;
+
+    @NotBlank(message = "{student.lastLoginDate.required}")
+    private String lastLoginDate;
+
+    @Size(min = 13, max = 13, message = "{student.lastLoginIp.size}")
+    @NotBlank(message = "{student.lastLoginIp.required}")
     private String lastLoginIp;
 }
