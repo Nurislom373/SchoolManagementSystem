@@ -1,21 +1,14 @@
-package org.khasanof.authservice.entity.student;
+package org.khasanof.authservice.dto.student;
 
 import lombok.*;
-import org.khasanof.authservice.entity.BaseEntity;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.io.Serializable;
+import org.khasanof.authservice.dto.GenericDTO;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection = "student")
 @ToString
-public class Student implements BaseEntity, Serializable {
-    @Id
-    private String id;
+public class StudentDetailDTO extends GenericDTO {
     private String parent_id;
     private String email;
     private String password;

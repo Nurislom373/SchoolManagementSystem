@@ -16,6 +16,7 @@
 
     <modules>
         <module>Auth-Service</module>
+        <module>Exam-Service</module>
     </modules>
 
 </project>
