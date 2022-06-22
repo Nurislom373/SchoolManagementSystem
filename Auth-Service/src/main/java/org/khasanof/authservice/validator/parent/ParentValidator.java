@@ -1,7 +1,7 @@
-package org.khasanof.authservice.validator.student;
+package org.khasanof.authservice.validator.parent;
 
-import org.khasanof.authservice.dto.student.StudentCreateDTO;
-import org.khasanof.authservice.dto.student.StudentUpdateDTO;
+import org.khasanof.authservice.dto.parent.ParentCreateDTO;
+import org.khasanof.authservice.dto.parent.ParentUpdateDTO;
 import org.khasanof.authservice.exception.exceptions.InvalidValidationException;
 import org.khasanof.authservice.validator.AbstractValidator;
 import org.springframework.stereotype.Component;
@@ -9,17 +9,17 @@ import org.springframework.stereotype.Component;
 import java.util.Objects;
 
 @Component
-public class StudentValidator extends AbstractValidator<StudentCreateDTO, StudentUpdateDTO, String> {
+public class ParentValidator extends AbstractValidator<ParentCreateDTO, ParentUpdateDTO, String> {
     @Override
-    public void validOnCreate(StudentCreateDTO studentCreateDTO) throws InvalidValidationException {
-        if (Objects.isNull(studentCreateDTO)) {
+    public void validOnCreate(ParentCreateDTO parentCreateDTO) throws InvalidValidationException {
+        if (Objects.isNull(parentCreateDTO)) {
             throw new InvalidValidationException("DTO is null");
         }
     }
 
     @Override
-    public void validOnUpdate(StudentUpdateDTO studentUpdateDTO) throws InvalidValidationException {
-        if (Objects.isNull(studentUpdateDTO)) {
+    public void validOnUpdate(ParentUpdateDTO parentUpdateDTO) throws InvalidValidationException {
+        if (Objects.isNull(parentUpdateDTO)) {
             throw new InvalidValidationException("DTO is null");
         }
     }
