@@ -1,5 +1,6 @@
 package org.khasanof.authservice.service.student;
 
+import org.khasanof.authservice.config.encryptions.PasswordEncoderConfigurer;
 import org.khasanof.authservice.criteria.student.StudentCriteria;
 import org.khasanof.authservice.dto.student.StudentCreateDTO;
 import org.khasanof.authservice.dto.student.StudentDetailDTO;
@@ -34,6 +35,7 @@ public class StudentService extends AbstractService<StudentRepository, StudentMa
     @Async
     public void create(StudentCreateDTO dto) {
         validator.validOnCreate(dto);
+        dto.setPassword(new PasswordEncoderConfigurer().passwordEncoder().encode(dto.getPassword()));
         logger.info("create student with -> " + Thread.currentThread().getName());
         repository.save(mapper.toCreateDTO(dto));
     }

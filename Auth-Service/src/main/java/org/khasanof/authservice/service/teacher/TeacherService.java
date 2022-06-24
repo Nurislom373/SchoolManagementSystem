@@ -1,5 +1,6 @@
 package org.khasanof.authservice.service.teacher;
 
+import org.khasanof.authservice.config.encryptions.PasswordEncoderConfigurer;
 import org.khasanof.authservice.criteria.teacher.TeacherCriteria;
 import org.khasanof.authservice.dto.teacher.TeacherCreateDTO;
 import org.khasanof.authservice.dto.teacher.TeacherDetailDTO;
@@ -34,6 +35,7 @@ public class TeacherService extends AbstractService<TeacherRepository, TeacherMa
     @Async
     public void create(TeacherCreateDTO dto) {
         validator.validOnCreate(dto);
+        dto.setPassword(new PasswordEncoderConfigurer().passwordEncoder().encode(dto.getPassword()));
         logger.info("create teacher with -> " + Thread.currentThread().getName());
         repository.save(mapper.toCreateDTO(dto));
     }

@@ -1,5 +1,6 @@
 package org.khasanof.authservice.service.parent;
 
+import org.khasanof.authservice.config.encryptions.PasswordEncoderConfigurer;
 import org.khasanof.authservice.criteria.parent.ParentCriteria;
 import org.khasanof.authservice.dto.parent.ParentCreateDTO;
 import org.khasanof.authservice.dto.parent.ParentDetailDTO;
@@ -34,6 +35,7 @@ public class ParentService extends AbstractService<ParentRepository, ParentMappe
     @Async
     public void create(ParentCreateDTO dto) {
         validator.validOnCreate(dto);
+        dto.setPassword(new PasswordEncoderConfigurer().passwordEncoder().encode(dto.getPassword()));
         logger.info("create parent with -> " + Thread.currentThread().getName());
         repository.save(mapper.toCreateDTO(dto));
     }

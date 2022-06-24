@@ -1,0 +1,23 @@
+spring:
+  data:
+    mongodb:
+      database: ExamType
+      host: localhost
+      port: 27017
+  application:
+    name: Exam-Service
+  cloud:
+    consul:
+      host: localhost
+      port: 8500
+      discovery:
+        instance-id: ${spring.application.name}:${random.uuid}
+server:
+  port: 8001
+
+management:
+  security:
+    enabled: false
+  endpoint:
+    health:
+      show-details: always
