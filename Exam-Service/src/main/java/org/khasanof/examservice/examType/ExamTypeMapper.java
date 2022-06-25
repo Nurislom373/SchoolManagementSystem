@@ -1,5 +1,7 @@
 package org.khasanof.examservice.examType;
 
+import org.khasanof.examservice.examType.dto.ExamTypeCreateDTO;
+import org.khasanof.examservice.examType.dto.ExamTypeUpdateDTO;
 import org.mapstruct.Mapper;
 import org.springframework.stereotype.Component;
 
@@ -9,4 +11,9 @@ public interface ExamTypeMapper {
     ExamType toCreateDTO(ExamTypeCreateDTO DTO);
 
     ExamTypeCreateDTO fromCreateDTO(ExamType entity);
+
+    ExamType toUpdateDTO(ExamTypeUpdateDTO DTO);
+
+    ExamTypeUpdateDTO fromUpdateDTO(ExamType entity);
+
 }

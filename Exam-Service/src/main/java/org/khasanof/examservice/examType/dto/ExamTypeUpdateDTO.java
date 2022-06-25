@@ -1,4 +1,4 @@
-package org.khasanof.authservice.dto.authentication;
+package org.khasanof.examservice.examType.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginDTO {
-    private String email;
-    private String password;
+public class ExamTypeUpdateDTO {
+    private String id;
+    private String name;
+    private String description;
 }

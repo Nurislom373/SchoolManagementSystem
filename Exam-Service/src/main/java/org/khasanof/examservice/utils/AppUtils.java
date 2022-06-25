@@ -1,5 +1,7 @@
-package org.khasanof.examservice.examType;
+package org.khasanof.examservice.utils;
 
+import org.khasanof.examservice.examType.ExamType;
+import org.khasanof.examservice.examType.dto.ExamTypeCreateDTO;
 import org.springframework.beans.BeanUtils;
 
 public class AppUtils {

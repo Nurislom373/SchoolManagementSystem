@@ -1,4 +1,4 @@
-package org.khasanof.examservice.examType;
+package org.khasanof.examservice.examType.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
