@@ -41,7 +41,6 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
                 .antMatchers(WHITE_LIST)
                 .permitAll()
                 .anyRequest().authenticated();
-
         http.addFilter(new CustomAuthenticationFilter(authenticationManagerBean()));
         http.addFilterBefore(new CustomAuthorizationFilter(), UsernamePasswordAuthenticationFilter.class);
     }

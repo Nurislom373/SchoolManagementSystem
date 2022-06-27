@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.khasanof.authservice.dto.authentication.LoginDTO;
 import org.khasanof.authservice.response.ApplicationError;
 import org.khasanof.authservice.response.Data;
+import org.khasanof.authservice.response.tokens.Tokens;
 import org.khasanof.authservice.security.jwt.JwtUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -14,7 +15,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -24,7 +24,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Date;
-import java.util.stream.Collectors;
 
 @Slf4j
 public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
@@ -39,9 +38,9 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
         try {
             LoginDTO loginDto = new ObjectMapper().readValue(request.getReader(), LoginDTO.class);
-            log.info("Username is: {}", loginDto.getUsername());
+            log.info("Username is: {}", loginDto.getEmail());
             UsernamePasswordAuthenticationToken authenticationToken =
-                    new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword());
+                    new UsernamePasswordAuthenticationToken(loginDto.getEmail(), loginDto.getPassword());
             return authenticationManager.authenticate(authenticationToken);
         } catch (IOException e) {
             log.error(e.getMessage(), e);
@@ -59,7 +58,6 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
                 .withSubject(user.getUsername())
                 .withExpiresAt(expiryForAccessToken)
                 .withIssuer(request.getRequestURL().toString())
-                .withClaim("roles", user.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()))
                 .sign(JwtUtils.getAlgorithm());
 
         String refreshToken = JWT.create()
@@ -69,7 +67,7 @@ public class CustomAuthenticationFilter extends UsernamePasswordAuthenticationFi
                 .sign(JwtUtils.getAlgorithm());
 
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        new ObjectMapper().writeValue(response.getOutputStream(), new Data<>(accessToken));
+        new ObjectMapper().writeValue(response.getOutputStream(), new Data<>(new Tokens(accessToken, refreshToken)));
 
     }
 

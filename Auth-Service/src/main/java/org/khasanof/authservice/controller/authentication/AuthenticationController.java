@@ -1,6 +1,7 @@
 package org.khasanof.authservice.controller.authentication;
 
 import org.khasanof.authservice.dto.authentication.LoginDTO;
+import org.khasanof.authservice.dto.authentication.LoginSetDTO;
 import org.khasanof.authservice.utils.BaseUtils;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -17,7 +18,10 @@ public class AuthenticationController {
 
     @RequestMapping(value = "login", method = RequestMethod.POST)
     public ResponseEntity<Object> login(@RequestBody LoginDTO dto) {
-        HttpEntity<LoginDTO> entity = new HttpEntity<>(dto);
+        LoginSetDTO setDTO = new LoginSetDTO();
+        setDTO.setEmail(dto.getEmail().concat(":").concat(dto.getType()));
+        setDTO.setPassword(dto.getPassword());
+        HttpEntity<LoginSetDTO> entity = new HttpEntity<>(setDTO);
         ResponseEntity<Object> exchange = BaseUtils.REST_TEMPLATE.exchange("http://localhost:8800/api//login", HttpMethod.POST, entity, Object.class);
         return new ResponseEntity<>(exchange.getBody(), HttpStatus.OK);
     }
