@@ -19,7 +19,7 @@ public class ExamRouter {
                 .GET("/exam", handler::getAll)
                 .GET("/exam/{id}", handler::get)
                 .POST("/exam/create", handler::save)
-                .PUT("/exam/update", handler::update)
+                .PUT("/exam/update/{id}", handler::update)
                 .DELETE("/exam/delete/{id}", handler::delete)
                 .build();
     }

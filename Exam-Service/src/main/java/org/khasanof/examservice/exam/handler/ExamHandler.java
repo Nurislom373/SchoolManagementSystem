@@ -30,11 +30,11 @@ public class ExamHandler {
     }
 
     public Mono<ServerResponse> save(ServerRequest request) {
-        return ServerResponse.ok().body(service.save(request.bodyToMono(ExamCreateDTO.class)), Exam.class);
+        return ServerResponse.ok().body(service.save(request.bodyToMono(ExamCreateDTO.class)), ExamGetDTO.class);
     }
 
     public Mono<ServerResponse> update(ServerRequest request) {
-        return ServerResponse.ok().body(service.update(request.bodyToMono(ExamUpdateDTO.class), request.pathVariable("id")), Exam.class);
+        return ServerResponse.ok().body(service.update(request.bodyToMono(ExamUpdateDTO.class), request.pathVariable("id")), ExamGetDTO.class);
     }
 
 

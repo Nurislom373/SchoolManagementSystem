@@ -19,12 +19,12 @@ public class ExamService {
     private final ExamMapper mapper;
     private final ExamRepository repository;
 
-    public Mono<Exam> save(Mono<ExamCreateDTO> mono) {
-        return mono.map(mapper::toCreateDTO).flatMap(repository::save);
+    public Mono<ExamGetDTO> save(Mono<ExamCreateDTO> mono) {
+        return mono.map(mapper::toCreateDTO).flatMap(repository::save).map(mapper::fromGetDTO);
     }
 
-    public Mono<Exam> update(Mono<ExamUpdateDTO> mono, String id) {
-        return repository.findById(id).flatMap(e -> mono.map(mapper::toUpdateDTO).doOnNext(p -> p.setId(id))).flatMap(repository::save);
+    public Mono<ExamGetDTO> update(Mono<ExamUpdateDTO> mono, String id) {
+        return repository.findById(id).flatMap(e -> mono.map(mapper::toUpdateDTO).doOnNext(p -> p.setId(id))).flatMap(repository::save).map(mapper::fromGetDTO);
     }
 
     public Flux<ExamGetDTO> getAll() {

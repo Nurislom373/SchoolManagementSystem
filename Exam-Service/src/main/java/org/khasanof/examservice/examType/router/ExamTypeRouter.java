@@ -8,10 +8,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
-import org.khasanof.examservice.examType.entity.ExamType;
 import org.khasanof.examservice.examType.dto.ExamTypeCreateDTO;
-import org.khasanof.examservice.examType.ExamTypeService;
 import org.khasanof.examservice.examType.dto.ExamTypeUpdateDTO;
+import org.khasanof.examservice.examType.entity.ExamType;
+import org.khasanof.examservice.examType.handler.ExamTypeHandler;
 import org.springdoc.core.annotations.RouterOperation;
 import org.springdoc.core.annotations.RouterOperations;
 import org.springframework.context.annotation.Bean;
@@ -26,7 +26,7 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 @RequiredArgsConstructor
 public class ExamTypeRouter {
 
-    private final ExamTypeService service;
+    private final ExamTypeHandler handler;
 
     @Bean
     @RouterOperations({
@@ -36,7 +36,7 @@ public class ExamTypeRouter {
                             MediaType.APPLICATION_JSON_VALUE
                     },
                     method = RequestMethod.GET,
-                    beanClass = ExamTypeService.class,
+                    beanClass = ExamTypeHandler.class,
                     beanMethod = "get",
                     operation = @Operation(
                             operationId = "get",
@@ -61,7 +61,7 @@ public class ExamTypeRouter {
                             MediaType.APPLICATION_JSON_VALUE
                     },
                     method = RequestMethod.GET,
-                    beanClass = ExamTypeService.class,
+                    beanClass = ExamTypeHandler.class,
                     beanMethod = "getAll",
                     operation = @Operation(
                             operationId = "getAll",
@@ -82,7 +82,7 @@ public class ExamTypeRouter {
                             MediaType.APPLICATION_JSON_VALUE
                     },
                     method = RequestMethod.POST,
-                    beanClass = ExamTypeService.class,
+                    beanClass = ExamTypeHandler.class,
                     beanMethod = "save",
                     operation = @Operation(
                             operationId = "save",
@@ -108,7 +108,7 @@ public class ExamTypeRouter {
                             MediaType.APPLICATION_JSON_VALUE
                     },
                     method = RequestMethod.PUT,
-                    beanClass = ExamTypeService.class,
+                    beanClass = ExamTypeHandler.class,
                     beanMethod = "update",
                     operation = @Operation(
                             operationId = "update",
@@ -130,14 +130,39 @@ public class ExamTypeRouter {
                                     ))
                             )
                     )
+            ),
+            @RouterOperation(
+                    path = "/exam_type/delete/{id}",
+                    produces = {
+                            MediaType.APPLICATION_JSON_VALUE
+                    },
+                    method = RequestMethod.PUT,
+                    beanClass = ExamTypeHandler.class,
+                    beanMethod = "delete",
+                    operation = @Operation(
+                            operationId = "delete",
+                            responses = {
+                                    @ApiResponse(
+                                            responseCode = "200",
+                                            description = "success",
+                                            content = @Content(schema = @Schema(
+                                                    implementation = Void.class
+                                            ))
+                                    )
+                            },
+                            parameters = {
+                                    @Parameter(in = ParameterIn.PATH, name = "id")
+                            }
+                    )
             )
     })
     public RouterFunction<ServerResponse> routerFunction() {
         return RouterFunctions.route()
-                .GET("/exam_type/{id}", service::get)
-                .GET("/exam_type", service::getAll)
-                .POST("/exam_type/create", service::save)
-                .PUT("/exam_type/update/{id}", service::update)
+                .GET("/exam_type/{id}", handler::get)
+                .GET("/exam_type", handler::getAll)
+                .POST("/exam_type/create", handler::save)
+                .PUT("/exam_type/update/{id}", handler::update)
+                .DELETE("/exam_type/delete/{id}", handler::delete)
                 .build();
     }
 }

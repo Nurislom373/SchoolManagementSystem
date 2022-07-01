@@ -2,6 +2,7 @@ package org.khasanof.examservice.examType;
 
 import lombok.RequiredArgsConstructor;
 import org.khasanof.examservice.examType.dto.ExamTypeCreateDTO;
+import org.khasanof.examservice.examType.dto.ExamTypeGetDTO;
 import org.khasanof.examservice.examType.dto.ExamTypeUpdateDTO;
 import org.khasanof.examservice.examType.entity.ExamType;
 import org.slf4j.Logger;
@@ -9,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 @Service
@@ -20,26 +22,24 @@ public class ExamTypeService {
 
     Logger logger = LoggerFactory.getLogger(ExamTypeService.class);
 
-    public Mono<ServerResponse> save(ServerRequest request) {
+    public Mono<ExamType> save(Mono<ExamTypeCreateDTO> mono) {
         logger.info("save thread name -> " + Thread.currentThread().getName());
-        return ServerResponse.ok().body(request.bodyToMono(ExamTypeCreateDTO.class).map(mapper::toCreateDTO).flatMap(repository::save), ExamType.class);
+        return mono.map(mapper::toCreateDTO).flatMap(repository::save);
     }
 
-    public Mono<ServerResponse> get(ServerRequest request) {
-        String id = request.pathVariable("id");
-        logger.info("get thread name -> " + Thread.currentThread().getName());
-        return ServerResponse.ok().body(repository.findById(id), ExamType.class);
+    public Mono<Void> delete(String id) {
+        return repository.deleteById(id);
     }
 
-    public Mono<ServerResponse> getAll(ServerRequest request) {
-        logger.info("get all thread name -> " + Thread.currentThread().getName());
-        return ServerResponse.ok().body(repository.findAll(), ExamType.class);
+    public Mono<ExamTypeGetDTO> get(String id) {
+        return repository.findById(id).map(mapper::fromGetDTO);
     }
 
-    public Mono<ServerResponse> update(ServerRequest request) {
-        logger.info("update thread name -> " + Thread.currentThread().getName());
-        String id = request.pathVariable("id");
-        Mono<ExamTypeUpdateDTO> updateDTOMono = request.bodyToMono(ExamTypeUpdateDTO.class);
-        return ServerResponse.ok().body(repository.findById(id).flatMap(e -> updateDTOMono.map(mapper::toUpdateDTO).doOnNext(p -> p.setId(id))).flatMap(repository::save), ExamType.class);
+    public Flux<ExamTypeGetDTO> getAll() {
+        return repository.findAll().map(mapper::fromGetDTO);
+    }
+
+    public Mono<ExamType> update(Mono<ExamTypeUpdateDTO> mono, String id) {
+        return repository.findById(id).flatMap(e -> mono.map(mapper::toUpdateDTO).doOnNext(p -> p.setId(id))).flatMap(repository::save);
     }
 }
