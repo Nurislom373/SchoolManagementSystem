@@ -3,6 +3,7 @@ package org.khasanof.examservice.examType;
 import lombok.RequiredArgsConstructor;
 import org.khasanof.examservice.examType.dto.ExamTypeCreateDTO;
 import org.khasanof.examservice.examType.dto.ExamTypeUpdateDTO;
+import org.khasanof.examservice.examType.entity.ExamType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

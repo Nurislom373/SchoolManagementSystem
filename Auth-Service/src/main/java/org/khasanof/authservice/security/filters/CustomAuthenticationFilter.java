@@ -1,6 +1,5 @@
 package org.khasanof.authservice.security.filters;
 
-
 import com.auth0.jwt.JWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;

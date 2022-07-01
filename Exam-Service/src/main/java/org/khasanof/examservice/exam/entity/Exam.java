@@ -1,18 +1,19 @@
-package org.khasanof.examservice.examType;
+package org.khasanof.examservice.exam.entity;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.annotation.Id;
+import lombok.Setter;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Data
+@Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Document(collection = "type")
-public class ExamType {
-    @Id
+@Document(collection = "exam")
+public class Exam {
     private String id;
+    private String examTypeId;
     private String name;
-    private String description;
+    private String startDate;
 }

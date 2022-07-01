@@ -8,7 +8,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.RequiredArgsConstructor;
-import org.khasanof.examservice.examType.ExamType;
+import org.khasanof.examservice.examType.entity.ExamType;
 import org.khasanof.examservice.examType.dto.ExamTypeCreateDTO;
 import org.khasanof.examservice.examType.ExamTypeService;
 import org.khasanof.examservice.examType.dto.ExamTypeUpdateDTO;
