@@ -10,7 +10,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ExamResultGetDTO {
-    private String id;
     private String examId;
     private String studentId;
     private String courseId;

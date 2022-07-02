@@ -5,17 +5,13 @@ import org.khasanof.examservice.exam.ExamService;
 import org.khasanof.examservice.exam.dto.ExamCreateDTO;
 import org.khasanof.examservice.exam.dto.ExamGetDTO;
 import org.khasanof.examservice.exam.dto.ExamUpdateDTO;
-import org.khasanof.examservice.exam.entity.Exam;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
 @Component
-@RequiredArgsConstructor
-public class ExamHandler {
-
-    private final ExamService service;
+public record ExamHandler(ExamService service) {
 
     public Mono<ServerResponse> getAll(ServerRequest request) {
         return ServerResponse.ok().body(service.getAll(), ExamGetDTO.class);

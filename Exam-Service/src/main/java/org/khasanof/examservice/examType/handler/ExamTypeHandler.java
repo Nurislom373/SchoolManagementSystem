@@ -12,9 +12,15 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
 @Component
-@RequiredArgsConstructor
-public class ExamTypeHandler {
-    private final ExamTypeService service;
+public record ExamTypeHandler(ExamTypeService service) {
+
+    public Mono<ServerResponse> get(ServerRequest request) {
+        return ServerResponse.ok().body(service.get(request.pathVariable("id")), ExamTypeGetDTO.class);
+    }
+
+    public Mono<ServerResponse> getAll(ServerRequest request) {
+        return ServerResponse.ok().body(service.getAll(), ExamTypeGetDTO.class);
+    }
 
     public Mono<ServerResponse> save(ServerRequest request) {
         return ServerResponse.ok().body(service.save(request.bodyToMono(ExamTypeCreateDTO.class)), ExamType.class);
@@ -26,14 +32,6 @@ public class ExamTypeHandler {
 
     public Mono<ServerResponse> update(ServerRequest request) {
         return ServerResponse.ok().body(service.update(request.bodyToMono(ExamTypeUpdateDTO.class), request.pathVariable("id")), ExamType.class);
-    }
-
-    public Mono<ServerResponse> get(ServerRequest request) {
-        return ServerResponse.ok().body(service.get(request.pathVariable("id")), ExamTypeGetDTO.class);
-    }
-
-    public Mono<ServerResponse> getAll(ServerRequest request) {
-        return ServerResponse.ok().body(service.getAll(), ExamTypeGetDTO.class);
     }
 
 }
