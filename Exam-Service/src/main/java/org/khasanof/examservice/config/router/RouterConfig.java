@@ -13,6 +13,7 @@ import org.khasanof.examservice.exam.dto.ExamUpdateDTO;
 import org.khasanof.examservice.exam.entity.Exam;
 import org.khasanof.examservice.exam.handler.ExamHandler;
 import org.khasanof.examservice.examResult.dto.ExamResultCreateDTO;
+import org.khasanof.examservice.examResult.dto.ExamResultDetailDTO;
 import org.khasanof.examservice.examResult.dto.ExamResultGetDTO;
 import org.khasanof.examservice.examResult.dto.ExamResultUpdateDTO;
 import org.khasanof.examservice.examResult.entity.ExamResult;
@@ -175,6 +176,31 @@ public class RouterConfig {
     @Bean
     @RouterOperations({
             @RouterOperation(
+                    path = "/exam_result/detail/{id}",
+                    produces = {
+                            MediaType.APPLICATION_JSON_VALUE
+                    },
+                    method = RequestMethod.GET,
+                    beanClass = ExamResultHandler.class,
+                    beanMethod = "detail",
+                    operation = @Operation(
+                            operationId = "detail",
+                            responses = {
+                                    @ApiResponse(
+                                            responseCode = "200",
+                                            description = "success",
+                                            content = @Content(schema = @Schema(
+                                                    implementation = ExamResultDetailDTO.class
+                                            ))
+                                    ),
+                                    @ApiResponse(responseCode = "404", description = "exam result not found with given id")
+                            },
+                            parameters = {
+                                    @Parameter(in = ParameterIn.PATH, name = "id")
+                            }
+                    )
+            ),
+            @RouterOperation(
                     path = "/exam_result/{id}",
                     produces = {
                             MediaType.APPLICATION_JSON_VALUE
@@ -306,6 +332,7 @@ public class RouterConfig {
     })
     public RouterFunction<ServerResponse> examResultRouter(ExamResultHandler handler) {
         return RouterFunctions.route()
+                .GET("/exam_result/detail/{id}", handler::detail)
                 .GET("/exam_result/{id}", handler::get)
                 .GET("/exam_result", handler::getAll)
                 .POST("/exam_result/save", handler::save)

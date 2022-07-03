@@ -44,8 +44,8 @@ public class StudentController extends AbstractController<StudentService> {
     }
 
     @RequestMapping(value = "get/{id}", method = RequestMethod.GET)
-    public ResponseEntity<Data<StudentGetDTO>> get(@PathVariable String id) throws ExecutionException, InterruptedException {
-        return new ResponseEntity<>(new Data<>(service.get(id).get()), HttpStatus.OK);
+    public ResponseEntity<StudentGetDTO> get(@PathVariable String id) throws ExecutionException, InterruptedException {
+        return new ResponseEntity<>(service.get(id).get(), HttpStatus.OK);
     }
 
     @RequestMapping(value = "detail/{id}", method = RequestMethod.GET)

@@ -3,6 +3,7 @@ package org.khasanof.examservice.examResult.handler;
 import lombok.RequiredArgsConstructor;
 import org.khasanof.examservice.examResult.ExamResultService;
 import org.khasanof.examservice.examResult.dto.ExamResultCreateDTO;
+import org.khasanof.examservice.examResult.dto.ExamResultDetailDTO;
 import org.khasanof.examservice.examResult.dto.ExamResultGetDTO;
 import org.khasanof.examservice.examResult.dto.ExamResultUpdateDTO;
 import org.khasanof.examservice.examResult.entity.ExamResult;
@@ -24,6 +25,10 @@ public record ExamResultHandler(ExamResultService service) {
 
     public Mono<ServerResponse> get(ServerRequest request) {
         return ServerResponse.ok().body(service.get(request.pathVariable("id")), ExamResultGetDTO.class);
+    }
+
+    public Mono<ServerResponse> detail(ServerRequest request) {
+        return ServerResponse.ok().body(service.detail(request.pathVariable("id")), ExamResultDetailDTO.class);
     }
 
     public Mono<ServerResponse> update(ServerRequest request) {
