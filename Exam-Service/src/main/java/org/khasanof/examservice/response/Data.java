@@ -1,12 +1,18 @@
 package org.khasanof.examservice.response;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import reactor.core.CoreSubscriber;
 import reactor.core.publisher.Mono;
 
+import java.io.Serializable;
+
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Data<T> {
     protected T data;
     protected long totalCount;

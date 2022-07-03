@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.khasanof.examservice.exam.dto.ExamGetDTO;
-import reactor.core.publisher.Mono;
 
 @Getter
 @Setter

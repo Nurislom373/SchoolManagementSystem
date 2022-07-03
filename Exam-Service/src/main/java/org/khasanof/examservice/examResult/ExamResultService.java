@@ -1,11 +1,11 @@
 package org.khasanof.examservice.examResult;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.khasanof.examservice.exam.ExamMapper;
 import org.khasanof.examservice.exam.ExamService;
-import org.khasanof.examservice.examResult.client.ExamResultServiceClient;
 import org.khasanof.examservice.examResult.dto.*;
 import org.khasanof.examservice.examResult.entity.ExamResult;
+import org.khasanof.examservice.response.Data;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
@@ -20,6 +20,7 @@ public class ExamResultService {
     private final ExamResultMapper mapper;
     private final WebClient webClient = WebClient.create("http://localhost:8800");
     private final ExamService examService;
+    private final ObjectMapper objectMapper;
 
     public Flux<ExamResultGetDTO> getAll() {
         return repository.findAll().map(mapper::fromGetDTO);
@@ -36,11 +37,11 @@ public class ExamResultService {
                         .zipWith(webClient.get()
                                 .uri("/student/get/{id}", examResult.getStudentId())
                                 .retrieve()
-                                .bodyToMono(StudentGetDTO.class)
+                                .bodyToMono(Data.class)
                         )
                         .publishOn(Schedulers.boundedElastic())
                         .doOnNext(e -> e.getT1().setExam(examService.get(examResult.getExamId()).block()))
-                ).doOnNext(objects -> objects.getT1().setStudent(objects.getT2()))
+                ).doOnNext(objects -> objects.getT1().setStudent(objectMapper.convertValue(objects.getT2().getData(), StudentGetDTO.class)))
                 .map(Tuple2::getT1);
     }
 
