@@ -1,6 +1,7 @@
 package org.khasanof.classroomservice.domain.classroom;
 
 import lombok.*;
+import org.khasanof.classroomservice.domain.BaseEntity;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -14,7 +15,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @ToString
 @Document(collection = "classroom")
-public class Classroom {
+public class Classroom implements BaseEntity {
     @Id
     private String id;
     @Min(value = 4, message = "year min value 4")
