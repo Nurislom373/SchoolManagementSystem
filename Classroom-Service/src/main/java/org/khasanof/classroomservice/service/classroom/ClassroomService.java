@@ -10,6 +10,7 @@ import org.khasanof.classroomservice.vo.classroom.ClassroomCreateVO;
 import org.khasanof.classroomservice.vo.classroom.ClassroomDetailVO;
 import org.khasanof.classroomservice.vo.classroom.ClassroomGetVO;
 import org.khasanof.classroomservice.vo.classroom.ClassroomUpdateVO;
+import org.khasanof.classroomservice.vo.teacher.TeacherGetVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -22,10 +23,12 @@ import java.util.List;
 @Service
 public class ClassroomService extends AbstractService<ClassroomRepository, ClassroomMapper, ClassroomValidator> {
 
+    private final ClassroomServiceClient client;
     Logger logger = LoggerFactory.getLogger(ClassroomService.class);
 
-    public ClassroomService(ClassroomRepository repository, ClassroomMapper mapper, ClassroomValidator validator) {
+    public ClassroomService(ClassroomRepository repository, ClassroomMapper mapper, ClassroomValidator validator, ClassroomServiceClient client) {
         super(repository, mapper, validator);
+        this.client = client;
     }
 
     public void create(ClassroomCreateVO vo) {
@@ -65,10 +68,14 @@ public class ClassroomService extends AbstractService<ClassroomRepository, Class
 
     public ClassroomDetailVO detail(String id) {
         validator.validateKey(id);
-        return mapper.fromDetailVO(repository.findById(id).orElseThrow(() -> {
+        Classroom classroom = repository.findById(id).orElseThrow(() -> {
             logger.warn("warning classroom not found to detail method classroom with - " + Thread.currentThread().getName());
             return new NotFoundException("classroom not found");
-        }));
+        });
+        TeacherGetVO teacherGetVO = client.get(classroom.getTeacherId()).getData();
+        ClassroomDetailVO detailVO = mapper.fromDetailVO(classroom);
+        detailVO.setTeacher(teacherGetVO);
+        return detailVO;
     }
 
     public List<ClassroomGetVO> list(ClassroomCriteria criteria) {

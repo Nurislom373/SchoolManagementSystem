@@ -20,6 +20,8 @@ public class SecurityConfigurer extends WebSecurityConfigurerAdapter {
     public final static String[] WHITE_LIST = {
             "/auth/login",
             "/student/**",
+            "/teacher/**",
+            "/parent/**",
             "/swagger-ui/**",
             "/swagger-documentation/**",
     };
