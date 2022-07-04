@@ -1,6 +1,7 @@
 package org.khasanof.examservice.examResult;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import org.khasanof.examservice.exam.ExamService;
 import org.khasanof.examservice.examResult.dto.*;
@@ -8,6 +9,7 @@ import org.khasanof.examservice.examResult.entity.ExamResult;
 import org.khasanof.examservice.response.Data;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
@@ -23,11 +25,13 @@ public class ExamResultService {
     private final ObjectMapper objectMapper;
 
     public Flux<ExamResultGetDTO> getAll() {
-        return repository.findAll().map(mapper::fromGetDTO);
+        return repository.findAll()
+                .map(mapper::fromGetDTO);
     }
 
     public Mono<ExamResult> save(Mono<ExamResultCreateDTO> mono) {
-        return mono.map(mapper::toCreateDTO).flatMap(repository::save);
+        return mono.map(mapper::toCreateDTO)
+                .flatMap(repository::save);
     }
 
     public Mono<ExamResultDetailDTO> detail(String id) {
@@ -50,10 +54,14 @@ public class ExamResultService {
     }
 
     public Mono<ExamResultGetDTO> get(String id) {
-        return repository.findById(id).map(mapper::fromGetDTO);
+        return repository.findById(id)
+                .map(mapper::fromGetDTO);
     }
 
     public Mono<ExamResult> update(Mono<ExamResultUpdateDTO> mono, String id) {
-        return repository.findById(id).flatMap(e -> mono.map(mapper::toUpdateDTO).doOnNext(p -> p.setId(id))).flatMap(repository::save);
+        return repository.findById(id)
+                .flatMap(e -> mono.map(mapper::toUpdateDTO)
+                        .doOnNext(p -> p.setId(id)))
+                .flatMap(repository::save);
     }
 }

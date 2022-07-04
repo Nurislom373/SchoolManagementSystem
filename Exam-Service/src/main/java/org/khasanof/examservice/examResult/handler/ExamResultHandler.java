@@ -1,5 +1,6 @@
 package org.khasanof.examservice.examResult.handler;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import org.khasanof.examservice.examResult.ExamResultService;
 import org.khasanof.examservice.examResult.dto.ExamResultCreateDTO;
@@ -13,7 +14,9 @@ import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Mono;
 
 @Component
-public record ExamResultHandler(ExamResultService service) {
+@RequiredArgsConstructor
+public class ExamResultHandler {
+    private final ExamResultService service;
 
     public Mono<ServerResponse> save(ServerRequest request) {
         return ServerResponse.ok().body(service.save(request.bodyToMono(ExamResultCreateDTO.class)), ExamResult.class);
@@ -38,5 +41,7 @@ public record ExamResultHandler(ExamResultService service) {
     public Mono<ServerResponse> getAll(ServerRequest request) {
         return ServerResponse.ok().body(service.getAll(), ExamResultGetDTO.class);
     }
+
+
 
 }
