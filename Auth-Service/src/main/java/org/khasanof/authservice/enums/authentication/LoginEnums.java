@@ -5,11 +5,19 @@ import lombok.RequiredArgsConstructor;
 import org.springdoc.api.annotations.ParameterObject;
 
 @Getter
-@ParameterObject
 @RequiredArgsConstructor
 public enum LoginEnums {
-    STUDENT("student"),
-    TEACHER("teacher"),
-    PARENT("parent");
+    STUDENT("STUDENT"),
+    TEACHER("TEACHER"),
+    PARENT("PARENT");
     private final String value;
+
+    public static boolean checkRole(String role) {
+        for (LoginEnums loginEnums : values()) {
+            if (loginEnums.getValue().equalsIgnoreCase(role)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

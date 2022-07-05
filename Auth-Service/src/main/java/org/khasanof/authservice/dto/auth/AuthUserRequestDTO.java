@@ -1,4 +1,4 @@
-package org.khasanof.authservice.dto.authentication;
+package org.khasanof.authservice.dto.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,8 +9,8 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginDTO {
-    private String type;
+public class AuthUserRequestDTO {
+    private String role;
     private String email;
     private String password;
 }

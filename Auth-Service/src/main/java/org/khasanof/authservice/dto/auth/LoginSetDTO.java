@@ -1,4 +1,4 @@
-package org.khasanof.authservice.dto.authentication;
+package org.khasanof.authservice.dto.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

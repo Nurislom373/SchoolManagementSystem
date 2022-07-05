@@ -75,6 +75,7 @@ public class ClassroomService extends AbstractService<ClassroomRepository, Class
         TeacherGetVO teacherGetVO = client.get(classroom.getTeacherId()).getData();
         ClassroomDetailVO detailVO = mapper.fromDetailVO(classroom);
         detailVO.setTeacher(teacherGetVO);
+        logger.info("successfully detail classroom with - " + Thread.currentThread().getName());
         return detailVO;
     }
 
