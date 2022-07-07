@@ -10,4 +10,5 @@ import java.util.Optional;
 @Repository
 public interface AuthUserRepository extends MongoRepository<AuthUser, String>, BaseRepository {
     Optional<AuthUser> findByEmailAndRoleEquals(String email, String role);
+    Optional<AuthUser> findByIdAndRoleEquals(String id, String role);
 }

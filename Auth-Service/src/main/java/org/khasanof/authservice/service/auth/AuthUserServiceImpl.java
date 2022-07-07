@@ -3,6 +3,7 @@ package org.khasanof.authservice.service.auth;
 import com.auth0.jwt.JWT;
 import org.khasanof.authservice.dto.auth.AuthUserCreateDTO;
 import org.khasanof.authservice.dto.auth.AuthUserRequestDTO;
+import org.khasanof.authservice.dto.student.StudentGetDTO;
 import org.khasanof.authservice.dto.token.TokenDTO;
 import org.khasanof.authservice.entity.auth.AuthUser;
 import org.khasanof.authservice.enums.authentication.LoginEnums;
@@ -23,7 +24,6 @@ import java.util.Date;
 public class AuthUserServiceImpl extends AbstractService<AuthUserRepository, AuthUserMapper, AuthUserValidator> implements AuthUserService {
 
     Logger logger = LoggerFactory.getLogger(AuthUserServiceImpl.class);
-
 
     public AuthUserServiceImpl(AuthUserRepository repository, AuthUserMapper mapper, AuthUserValidator validator) {
         super(repository, mapper, validator);
@@ -79,6 +79,19 @@ public class AuthUserServiceImpl extends AbstractService<AuthUserRepository, Aut
             logger.error("Role is invalid : " + dto.getRole());
             throw new RuntimeException("Role is invalid");
         }
+    }
+
+    @Override
+    public StudentGetDTO studentGet(String id) {
+        validator.validateKey(id);
+        AuthUser user = repository.findByIdAndRoleEquals(id, LoginEnums.STUDENT.getValue()).orElseThrow(() -> {
+            logger.error("user not found with " + Thread.currentThread().getName());
+            throw new NotFoundException("User not found");
+        });
+        logger.info("studentGet get with -> " + Thread.currentThread().getName());
+        StudentGetDTO studentGetDTO = mapper.toStudentGetDTO(user);
+        System.out.println("studentGetDTO = " + studentGetDTO);
+        return studentGetDTO;
     }
 
     private boolean checkHasRole(String role) {

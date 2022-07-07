@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.khasanof.classroomservice.vo.GenericVO;
+import org.khasanof.classroomservice.vo.grade.GradeGetVO;
 
 @Getter
 @Setter
@@ -13,5 +14,5 @@ import org.khasanof.classroomservice.vo.GenericVO;
 public class CourseDetailVO extends GenericVO {
     private String name;
     private String description;
-    private String gradeId;
+    private GradeGetVO grade;
 }

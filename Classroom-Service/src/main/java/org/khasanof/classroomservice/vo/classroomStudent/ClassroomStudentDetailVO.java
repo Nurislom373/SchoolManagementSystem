@@ -1,16 +1,15 @@
 package org.khasanof.classroomservice.vo.classroomStudent;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.khasanof.classroomservice.vo.GenericVO;
+import org.khasanof.classroomservice.vo.classroom.ClassroomGetVO;
+import org.khasanof.classroomservice.vo.student.StudentGetVO;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class ClassroomStudentDetailVO extends GenericVO {
-    private String classroomStudentId;
-    private String studentId;
+    private StudentGetVO student;
+    private ClassroomGetVO classroom;
 }
