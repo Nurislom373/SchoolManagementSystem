@@ -84,4 +84,8 @@ public class ClassroomService extends AbstractService<ClassroomRepository, Class
         logger.info("successfully list classroom with - " + Thread.currentThread().getName());
         return mapper.fromGetListVO(repository.findAll(request).stream().toList());
     }
+
+    public List<ClassroomGetVO> listWithGrade(String id) {
+        return mapper.fromGetListVO(repository.findAllByGradeIdEquals(id));
+    }
 }

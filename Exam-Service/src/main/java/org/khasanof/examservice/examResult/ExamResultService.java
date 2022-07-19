@@ -1,19 +1,21 @@
 package org.khasanof.examservice.examResult;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import lombok.RequiredArgsConstructor;
 import org.khasanof.examservice.exam.ExamService;
 import org.khasanof.examservice.examResult.dto.*;
 import org.khasanof.examservice.examResult.entity.ExamResult;
+import org.khasanof.examservice.exception.exception.NotFoundException;
 import org.khasanof.examservice.response.Data;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 import reactor.util.function.Tuple2;
+
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -30,7 +32,13 @@ public class ExamResultService {
     }
 
     public Mono<ExamResult> save(Mono<ExamResultCreateDTO> mono) {
-        return mono.map(mapper::toCreateDTO)
+        return mono.flatMap(obj -> {
+                    if (Objects.isNull(obj)) {
+                        return Mono.error(new NotFoundException("Exam Result not found"));
+                    }
+                    return Mono.just(obj);
+                })
+                .map(mapper::toCreateDTO)
                 .flatMap(repository::save);
     }
 
@@ -50,17 +58,32 @@ public class ExamResultService {
     }
 
     public Mono<Void> delete(String id) {
-        return repository.deleteById(id);
+        return repository.findById(id).flatMap(obj -> {
+            if (Objects.isNull(obj)) {
+                return Mono.error(new NotFoundException("Exam Result not found"));
+            }
+            return Mono.just(obj);
+        }).flatMap(repository::delete);
     }
 
     public Mono<ExamResultGetDTO> get(String id) {
         return repository.findById(id)
-                .map(mapper::fromGetDTO);
+                .flatMap(obj -> {
+                    if (Objects.isNull(obj)) {
+                        return Mono.error(new NotFoundException("Exam Result not found"));
+                    }
+                    return Mono.just(obj);
+                }).map(mapper::fromGetDTO);
     }
 
     public Mono<ExamResult> update(Mono<ExamResultUpdateDTO> mono, String id) {
         return repository.findById(id)
-                .flatMap(e -> mono.map(mapper::toUpdateDTO)
+                .flatMap(obj -> {
+                    if (Objects.isNull(obj)) {
+                        return Mono.error(new NotFoundException("Exam Result not found"));
+                    }
+                    return Mono.just(obj);
+                }).flatMap(e -> mono.map(mapper::toUpdateDTO)
                         .doOnNext(p -> p.setId(id)))
                 .flatMap(repository::save);
     }

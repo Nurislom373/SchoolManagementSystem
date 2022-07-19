@@ -1,4 +1,4 @@
-GET http://localhost:8001/exam_type
+GET http://localhost:8001/exam_result/62c1a1b25ceca80d9d863e52
 Accept: application/json
 
 ###

@@ -1,9 +1,12 @@
 package org.khasanof.authservice.service.auth;
 
 import com.auth0.jwt.JWT;
+import org.khasanof.authservice.criteria.auth.AuthUserCriteria;
 import org.khasanof.authservice.dto.auth.AuthUserCreateDTO;
+import org.khasanof.authservice.dto.auth.AuthUserGetDTO;
 import org.khasanof.authservice.dto.auth.AuthUserRequestDTO;
 import org.khasanof.authservice.dto.student.StudentGetDTO;
+import org.khasanof.authservice.dto.teacher.TeacherGetDTO;
 import org.khasanof.authservice.dto.token.TokenDTO;
 import org.khasanof.authservice.entity.auth.AuthUser;
 import org.khasanof.authservice.enums.authentication.LoginEnums;
@@ -15,10 +18,12 @@ import org.khasanof.authservice.utils.jwt.JwtUtils;
 import org.khasanof.authservice.validator.auth.AuthUserValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
 import java.util.Date;
+import java.util.List;
 
 @Service
 public class AuthUserServiceImpl extends AbstractService<AuthUserRepository, AuthUserMapper, AuthUserValidator> implements AuthUserService {
@@ -92,6 +97,23 @@ public class AuthUserServiceImpl extends AbstractService<AuthUserRepository, Aut
         StudentGetDTO studentGetDTO = mapper.toStudentGetDTO(user);
         System.out.println("studentGetDTO = " + studentGetDTO);
         return studentGetDTO;
+    }
+
+    @Override
+    public TeacherGetDTO teacherGet(String id) {
+        validator.validateKey(id);
+        AuthUser user = repository.findByIdAndRoleEquals(id, LoginEnums.TEACHER.getValue()).orElseThrow(() -> {
+            logger.error("user not found with " + Thread.currentThread().getName());
+            throw new NotFoundException("User not found");
+        });
+        logger.info("teacherGet get with -> " + Thread.currentThread().getName());
+        return mapper.toTeacherGetDTO(user);
+    }
+
+    @Override
+    public List<AuthUserGetDTO> list(AuthUserCriteria criteria) {
+        PageRequest pageRequest = PageRequest.of(criteria.getPage(), criteria.getSize());
+        return mapper.fromGetListDTO(repository.findAll(pageRequest).stream().toList());
     }
 
     private boolean checkHasRole(String role) {

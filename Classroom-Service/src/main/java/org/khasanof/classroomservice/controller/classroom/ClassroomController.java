@@ -68,9 +68,13 @@ public class ClassroomController extends AbstractController<ClassroomService> {
         return new ResponseEntity<>(new Data<>(detailVO), HttpStatus.OK);
     }
 
-
     @RequestMapping(value = "list", method = RequestMethod.GET)
     public ResponseEntity<Data<List<ClassroomGetVO>>> list(@Valid ClassroomCriteria criteria) {
         return new ResponseEntity<>(new Data<>(service.list(criteria)), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "listWithGrade/{code}", method = RequestMethod.GET)
+    public ResponseEntity<Data<List<ClassroomGetVO>>> listWithGrade(@PathVariable String code) {
+        return new ResponseEntity<>(new Data<>(service.listWithGrade(code)), HttpStatus.OK);
     }
 }
