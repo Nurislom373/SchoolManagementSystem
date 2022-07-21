@@ -1,5 +1,6 @@
 package org.khasanof.classroomservice.controller.classroomStudent;
 
+import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
 import org.khasanof.classroomservice.controller.AbstractController;
 import org.khasanof.classroomservice.criteria.classroomStudent.ClassroomStudentCriteria;
 import org.khasanof.classroomservice.response.Data;
@@ -41,6 +42,7 @@ public class ClassroomStudentController extends AbstractController<ClassroomStud
     }
 
     @RequestMapping(value = "detail/{id}", method = RequestMethod.GET)
+    @CircuitBreaker(name = BaseUtils.AUTH_SERVICE, fallbackMethod = "failMethod")
     public ResponseEntity<Data<ClassroomStudentDetailVO>> detail(@PathVariable String id) {
         return new ResponseEntity<>(new Data<>(service.detail(id)), HttpStatus.OK);
     }
@@ -53,5 +55,9 @@ public class ClassroomStudentController extends AbstractController<ClassroomStud
     @RequestMapping(value = "list/classroom={id}", method = RequestMethod.GET)
     public ResponseEntity<Data<List<ClassroomStudentGetVO>>> list(@PathVariable String id) {
         return new ResponseEntity<>(new Data<>(service.list(id), service.count()), HttpStatus.OK);
+    }
+
+    public ResponseEntity<Data<String>> failMethod(Exception e) {
+        return new ResponseEntity<>(new Data<>("Server is down!!!"), HttpStatus.OK);
     }
 }

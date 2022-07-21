@@ -21,8 +21,6 @@ import java.util.List;
 @RequestMapping(value = BaseUtils.PATH + "/classroom/*")
 public class ClassroomController extends AbstractController<ClassroomService> {
 
-    private static final String AUTH_SERVICE = "authService";
-
     public ClassroomController(ClassroomService service) {
         super(service);
     }
@@ -51,18 +49,18 @@ public class ClassroomController extends AbstractController<ClassroomService> {
     }
 
     @RequestMapping(value = "detail/{id}", method = RequestMethod.GET)
-    @CircuitBreaker(name = AUTH_SERVICE, fallbackMethod = "failMethod")
+    @CircuitBreaker(name = BaseUtils.AUTH_SERVICE, fallbackMethod = "failMethod")
     public ResponseEntity<Data<ClassroomDetailVO>> detail(@PathVariable String id) {
         return new ResponseEntity<>(new Data<>(service.detail(id)), HttpStatus.OK);
     }
 
     @RequestMapping(value = "list", method = RequestMethod.GET)
-    @CircuitBreaker(name = AUTH_SERVICE, fallbackMethod = "failMethod")
     public ResponseEntity<Data<List<ClassroomGetVO>>> list(@Valid ClassroomCriteria criteria) {
         return new ResponseEntity<>(new Data<>(service.list(criteria), service.count()), HttpStatus.OK);
     }
 
     @RequestMapping(value = "listWithDetail", method = RequestMethod.GET)
+    @CircuitBreaker(name = BaseUtils.AUTH_SERVICE, fallbackMethod = "failMethod")
     public ResponseEntity<Data<List<ClassroomDetailVO>>> listWithDetail(@Valid ClassroomCriteria criteria) {
         return new ResponseEntity<>(new Data<>(service.listGetDetail(criteria), service.count()), HttpStatus.OK);
     }

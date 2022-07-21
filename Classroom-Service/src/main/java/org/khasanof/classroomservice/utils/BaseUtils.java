@@ -15,6 +15,8 @@ public class BaseUtils {
     public static final String VERSION = "/v1";
     public static final String PATH = API + VERSION;
 
+    public static final String AUTH_SERVICE = "authService";
+
     public static boolean hasField(final Class<?> clazz, final String fieldName) {
         final List<Field> fields = new ArrayList<>();
         Collections.addAll(fields, clazz.getDeclaredFields());
