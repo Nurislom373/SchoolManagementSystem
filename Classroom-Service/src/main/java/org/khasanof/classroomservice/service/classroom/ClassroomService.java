@@ -13,10 +13,12 @@ import org.khasanof.classroomservice.vo.classroom.ClassroomGetVO;
 import org.khasanof.classroomservice.vo.classroom.ClassroomUpdateVO;
 import org.khasanof.classroomservice.vo.teacher.TeacherGetVO;
 import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -72,6 +74,16 @@ public class ClassroomService extends AbstractService<ClassroomRepository, Class
     public List<ClassroomGetVO> list(ClassroomCriteria criteria) {
         PageRequest request = PageRequest.of(criteria.getPage(), criteria.getSize(), criteria.getSort(), criteria.getFieldsEnum().getValue());
         return mapper.fromGetListVO(repository.findAll(request).stream().toList());
+    }
+
+    public List<ClassroomDetailVO> listGetDetail(ClassroomCriteria criteria) {
+        List<ClassroomDetailVO> detailVOS = new ArrayList<>();
+        PageRequest request = PageRequest.of(criteria.getPage(), criteria.getSize(), criteria.getSort(), criteria.getFieldsEnum().getValue());
+        Page<Classroom> all = repository.findAll(request);
+        for (Classroom classroom : all) {
+            detailVOS.add(detail(classroom.getId()));
+        }
+        return detailVOS;
     }
 
     public List<ClassroomGetVO> listKeyValue(String key, String value) {
