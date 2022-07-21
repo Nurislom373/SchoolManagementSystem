@@ -21,15 +21,19 @@ public class BaseUtils {
         return fields.stream().map(Field::getName).anyMatch(f -> f.equalsIgnoreCase(fieldName));
     }
 
-    public static Class<?> fieldGetType(final Class<?> clazz, final String fieldName) {
+    public static boolean fieldGetType(final Class<?> clazz, final String fieldName, String value) {
         final List<Field> fields = new ArrayList<>();
         Collections.addAll(fields, clazz.getDeclaredFields());
         for (Field field : fields) {
             if (field.getName().equals(fieldName)) {
-                return field.getType();
+                return equalsValue(field.getType().getSimpleName(), value);
             }
         }
-        return null;
+        return false;
+    }
+
+    private static boolean equalsValue(String key, String value) {
+        return key.equalsIgnoreCase(value);
     }
 
 

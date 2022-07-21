@@ -12,8 +12,6 @@ import org.khasanof.classroomservice.vo.classroom.ClassroomDetailVO;
 import org.khasanof.classroomservice.vo.classroom.ClassroomGetVO;
 import org.khasanof.classroomservice.vo.classroom.ClassroomUpdateVO;
 import org.khasanof.classroomservice.vo.teacher.TeacherGetVO;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -79,7 +77,7 @@ public class ClassroomService extends AbstractService<ClassroomRepository, Class
     public List<ClassroomGetVO> listKeyValue(String key, String value) {
         validator.validateKeyValue(key, value);
         if (BaseUtils.hasField(Classroom.class, key)) {
-            if (BaseUtils.fieldGetType(Classroom.class, key).getSimpleName().equalsIgnoreCase("String")) {
+            if (BaseUtils.fieldGetType(Classroom.class, key, "String")) {
                 return mapper.fromGetListVO(repository.findAll(key, value));
             } else {
                 return mapper.fromGetListVO(repository.findAll(key, Integer.valueOf(value)));
@@ -91,10 +89,29 @@ public class ClassroomService extends AbstractService<ClassroomRepository, Class
 
     public List<ClassroomGetVO> listKeyValue(String key, Integer minValue, Integer maxValue) {
         validator.validateKeyMinMax(key, minValue, maxValue);
-        return mapper.fromGetListVO(repository.findAll(key, (minValue - 1), (maxValue + 1)));
+        if (BaseUtils.hasField(Classroom.class, key)) {
+            if (BaseUtils.fieldGetType(Classroom.class, key, "int")) {
+                if (checkMinMaxValue(minValue, maxValue)) {
+                    return mapper.fromGetListVO(repository.findAll(key, (minValue - 1), (maxValue + 1)));
+                } else {
+                    throw new RuntimeException("min value is not little max value");
+                }
+            } else {
+                throw new RuntimeException("Class field is not Numeric type");
+            }
+        } else {
+            throw new RuntimeException("Not found Class Field");
+        }
     }
 
     public Long count() {
         return repository.count();
+    }
+
+    private boolean checkMinMaxValue(Integer min, Integer max) {
+        if (max == 0 || (min.equals(max))) {
+            throw new RuntimeException("Invalid value");
+        }
+        return min < max;
     }
 }
