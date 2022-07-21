@@ -56,6 +56,21 @@ public class ClassroomController extends AbstractController<ClassroomService> {
         return new ResponseEntity<>(new Data<>(service.detail(id)), HttpStatus.OK);
     }
 
+    @RequestMapping(value = "list", method = RequestMethod.GET)
+    public ResponseEntity<Data<List<ClassroomGetVO>>> list(@Valid ClassroomCriteria criteria) {
+        return new ResponseEntity<>(new Data<>(service.list(criteria)), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "list/key={key}&value={value}", method = RequestMethod.GET)
+    public ResponseEntity<Data<List<ClassroomGetVO>>> listGetKeyValue(@PathVariable String key, @PathVariable String value) {
+        return new ResponseEntity<>(new Data<>(service.listKeyValue(key, value), service.count()), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "list/key={key}&min={min}&max={max}", method = RequestMethod.GET)
+    public ResponseEntity<Data<List<ClassroomGetVO>>> listGetKeyMinMax(@PathVariable String key, @PathVariable Integer min, @PathVariable Integer max) {
+        return new ResponseEntity<>(new Data<>(service.listKeyValue(key, min, max), service.count()), HttpStatus.OK);
+    }
+
     public ResponseEntity<Data<ClassroomDetailVO>> getDetail(Exception e) {
         ClassroomDetailVO detailVO = new ClassroomDetailVO();
         detailVO.setTeacher(null);
@@ -66,15 +81,5 @@ public class ClassroomController extends AbstractController<ClassroomService> {
         detailVO.setId("1");
         detailVO.setYear(2004);
         return new ResponseEntity<>(new Data<>(detailVO), HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "list", method = RequestMethod.GET)
-    public ResponseEntity<Data<List<ClassroomGetVO>>> list(@Valid ClassroomCriteria criteria) {
-        return new ResponseEntity<>(new Data<>(service.list(criteria)), HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "listWithGrade/{code}", method = RequestMethod.GET)
-    public ResponseEntity<Data<List<ClassroomGetVO>>> listWithGrade(@PathVariable String code) {
-        return new ResponseEntity<>(new Data<>(service.listWithGrade(code)), HttpStatus.OK);
     }
 }

@@ -30,4 +30,17 @@ public class ClassroomValidator extends AbstractValidator<ClassroomCreateVO, Cla
             throw new InvalidValidationException("ID is null");
         }
     }
+
+    public void validateKeyValue(String key, String value) throws InvalidValidationException {
+        if (Objects.isNull(key) || Objects.isNull(value)) {
+            throw new InvalidValidationException("Parameter is null");
+        }
+    }
+
+    public void validateKeyMinMax(String key, Integer min, Integer max) throws InvalidValidationException {
+        if (Objects.isNull(key) || Objects.isNull(min) || Objects.isNull(max)) {
+            throw new InvalidValidationException("Parameter is null");
+        }
+    }
+
 }

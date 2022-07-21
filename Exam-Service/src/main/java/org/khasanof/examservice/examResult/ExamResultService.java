@@ -7,7 +7,6 @@ import org.khasanof.examservice.examResult.dto.*;
 import org.khasanof.examservice.examResult.entity.ExamResult;
 import org.khasanof.examservice.exception.exception.NotFoundException;
 import org.khasanof.examservice.response.Data;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
