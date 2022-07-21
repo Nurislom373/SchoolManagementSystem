@@ -20,13 +20,13 @@ import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class ClassroomStudentService extends AbstractService<ClassroomStudentRepository, ClassroomStudentMapper, ClassroomStudentValidator> {
 
     private final ClassroomStudentServiceClient client;
     private final ClassroomService classroomService;
-    Logger logger = LoggerFactory.getLogger(ClassroomStudentService.class);
 
     public ClassroomStudentService(ClassroomStudentRepository repository, ClassroomStudentMapper mapper, ClassroomStudentValidator validator, ClassroomStudentServiceClient client, ClassroomService classroomService) {
         super(repository, mapper, validator);
@@ -36,24 +36,24 @@ public class ClassroomStudentService extends AbstractService<ClassroomStudentRep
 
     public void create(ClassroomStudentCreateVO vo) {
         validator.validOnCreate(vo);
-        repository.save(mapper.toCreateVO(vo));
-        logger.info("successfully created classroomStudent with - " + Thread.currentThread().getName());
+        if (Objects.isNull(repository.findByClassroomIdAndStudentIdEquals(vo.getClassroomId(), vo.getStudentId()))) {
+            repository.save(mapper.toCreateVO(vo));
+        } else {
+            throw new RuntimeException("Classroom Student is already created!");
+        }
     }
 
     public void delete(String id) {
         validator.validateKey(id);
         ClassroomStudent classroomStudent = repository.findById(id).orElseThrow(() -> {
-            logger.warn("warning classroom student not found to delete method with - " + Thread.currentThread().getName());
             throw new NotFoundException("Classroom Student not found");
         });
         repository.delete(classroomStudent);
-        logger.info("successfully delete classroom student with - " + Thread.currentThread().getName());
     }
 
     public ClassroomStudentGetVO get(String id) {
         validator.validateKey(id);
         return mapper.fromGetVO(repository.findById(id).orElseThrow(() -> {
-            logger.warn("warning classroom student not found to get method with - " + Thread.currentThread().getName());
             throw new NotFoundException("classroom student not found");
         }));
     }
@@ -61,19 +61,32 @@ public class ClassroomStudentService extends AbstractService<ClassroomStudentRep
     public ClassroomStudentDetailVO detail(String id) {
         validator.validateKey(id);
         ClassroomStudent classroomStudent = repository.findById(id).orElseThrow(() -> {
-            logger.warn("warning classroom student not found to detail method with - " + Thread.currentThread().getName());
             throw new NotFoundException("Classroom student not found");
         });
         Data<StudentGetVO> studentGetVOData = client.get(classroomStudent.getStudentId());
         ClassroomGetVO classroomGetVO = classroomService.get(classroomStudent.getClassroomId());
-        ClassroomStudentDetailVO detailVO = new ClassroomStudentDetailVO(studentGetVOData.getData(), classroomGetVO);
+        ClassroomStudentDetailVO detailVO = ClassroomStudentDetailVO.builder()
+                .classroom(Objects.isNull(classroomGetVO) ? null : classroomGetVO)
+                .student(Objects.isNull(studentGetVOData.getData()) ? null : studentGetVOData.getData())
+                .build();
         detailVO.setId(classroomStudent.getId());
         return detailVO;
     }
 
     public List<ClassroomStudentGetVO> list(ClassroomStudentCriteria criteria) {
         PageRequest request = PageRequest.of(criteria.getPage(), criteria.getSize());
-        logger.info("successfully list classroom student with - " + Thread.currentThread().getName());
         return mapper.fromGetListVO(repository.findAll(request).stream().toList());
+    }
+
+    public List<ClassroomStudentGetVO> list(String id) {
+        ClassroomGetVO classroomGetVO = classroomService.get(id);
+        if (Objects.isNull(classroomGetVO)) {
+            throw new NotFoundException("Classroom not found");
+        }
+        return mapper.fromGetListVO(repository.findAllByClassroomIdEquals(id));
+    }
+
+    public Long count() {
+        return repository.count();
     }
 }

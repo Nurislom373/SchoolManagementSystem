@@ -9,6 +9,7 @@ import org.khasanof.classroomservice.vo.student.StudentGetVO;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class ClassroomStudentDetailVO extends GenericVO {
     private StudentGetVO student;
     private ClassroomGetVO classroom;

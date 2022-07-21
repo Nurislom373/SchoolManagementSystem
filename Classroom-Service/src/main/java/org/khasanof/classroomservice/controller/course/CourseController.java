@@ -56,4 +56,9 @@ public class CourseController extends AbstractController<CourseService> {
     public ResponseEntity<Data<List<CourseGetVO>>> list(@Valid CourseCriteria criteria) {
         return new ResponseEntity<>(new Data<>(service.list(criteria)), HttpStatus.OK);
     }
+
+    @RequestMapping(value = "list/grade={id}", method = RequestMethod.GET)
+    public ResponseEntity<Data<List<CourseGetVO>>> list(@PathVariable String id) {
+        return new ResponseEntity<>(new Data<>(service.list(id)), HttpStatus.OK);
+    }
 }

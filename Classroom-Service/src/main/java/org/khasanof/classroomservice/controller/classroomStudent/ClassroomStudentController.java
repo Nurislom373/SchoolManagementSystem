@@ -47,6 +47,11 @@ public class ClassroomStudentController extends AbstractController<ClassroomStud
 
     @RequestMapping(value = "list", method = RequestMethod.GET)
     public ResponseEntity<Data<List<ClassroomStudentGetVO>>> list(@Valid ClassroomStudentCriteria criteria) {
-        return new ResponseEntity<>(new Data<>(service.list(criteria)), HttpStatus.OK);
+        return new ResponseEntity<>(new Data<>(service.list(criteria), service.count()), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "list/classroom={id}", method = RequestMethod.GET)
+    public ResponseEntity<Data<List<ClassroomStudentGetVO>>> list(@PathVariable String id) {
+        return new ResponseEntity<>(new Data<>(service.list(id), service.count()), HttpStatus.OK);
     }
 }
