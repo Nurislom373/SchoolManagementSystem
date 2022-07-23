@@ -26,6 +26,10 @@ public class ExamResultHandler {
         return ServerResponse.ok().body(service.delete(request.pathVariable("id")), Void.class);
     }
 
+    public Mono<ServerResponse> deleteUser(ServerRequest request) {
+        return ServerResponse.ok().body(service.deleteUser(request.pathVariable("id")), Void.class);
+    }
+
     public Mono<ServerResponse> get(ServerRequest request) {
         return ServerResponse.ok().body(service.get(request.pathVariable("id")), ExamResultGetDTO.class);
     }

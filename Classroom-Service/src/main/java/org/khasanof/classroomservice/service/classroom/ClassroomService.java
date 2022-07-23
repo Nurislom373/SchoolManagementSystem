@@ -53,6 +53,16 @@ public class ClassroomService extends AbstractService<ClassroomRepository, Class
         repository.delete(classroom);
     }
 
+    public void deleteUserId(String userId) {
+        validator.validateKey(userId);
+        List<Classroom> list = repository.findAllByTeacherIdEquals(userId);
+        if (list.isEmpty()) {
+            throw new NotFoundException("Classroom not found");
+        } else {
+            repository.deleteAll(list);
+        }
+    }
+
     public ClassroomGetVO get(String id) {
         validator.validateKey(id);
         return mapper.fromGetVO(repository.findById(id).orElseThrow(() -> {

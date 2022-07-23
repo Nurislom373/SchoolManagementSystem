@@ -16,6 +16,8 @@ public interface AuthUserService extends BaseService {
 
     void register(AuthUserCreateDTO dto);
 
+    void delete(String id);
+
     StudentGetDTO studentGet(String id);
 
     TeacherGetDTO teacherGet(String id);

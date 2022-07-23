@@ -300,6 +300,31 @@ public class RouterConfig {
                     )
             ),
             @RouterOperation(
+                    path = "/exam_result/delete/userId={id}",
+                    produces = {
+                            MediaType.APPLICATION_JSON_VALUE
+                    },
+                    method = RequestMethod.DELETE,
+                    beanClass = ExamResultHandler.class,
+                    beanMethod = "deleteUser",
+                    operation = @Operation(
+                            operationId = "deleteUser",
+                            responses = {
+                                    @ApiResponse(
+                                            responseCode = "200",
+                                            description = "success",
+                                            content = @Content(schema = @Schema(
+                                                    implementation = ExamResult.class
+                                            ))
+                                    ),
+                                    @ApiResponse(responseCode = "404", description = "exam result not found with given id")
+                            },
+                            parameters = {
+                                    @Parameter(in = ParameterIn.PATH, name = "id")
+                            }
+                    )
+            ),
+            @RouterOperation(
                     path = "/exam_result/update/{id}",
                     produces = {
                             MediaType.APPLICATION_JSON_VALUE
@@ -337,6 +362,7 @@ public class RouterConfig {
                 .GET("/exam_result", handler::getAll)
                 .POST("/exam_result/save", handler::save)
                 .DELETE("/exam_result/delete/{id}", handler::delete)
+                .DELETE("exam_result/delete/userId={id}", handler::deleteUser)
                 .PUT("/exam_result/update/{id}", handler::update)
                 .build();
     }

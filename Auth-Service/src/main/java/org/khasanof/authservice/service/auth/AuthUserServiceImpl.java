@@ -12,6 +12,7 @@ import org.khasanof.authservice.entity.auth.AuthUser;
 import org.khasanof.authservice.enums.authentication.LoginEnums;
 import org.khasanof.authservice.mapper.auth.AuthUserMapper;
 import org.khasanof.authservice.repository.auth.AuthUserRepository;
+import org.khasanof.authservice.response.Data;
 import org.khasanof.authservice.service.AbstractService;
 import org.khasanof.authservice.utils.BaseUtils;
 import org.khasanof.authservice.utils.jwt.JwtUtils;
@@ -84,6 +85,15 @@ public class AuthUserServiceImpl extends AbstractService<AuthUserRepository, Aut
             logger.error("Role is invalid : " + dto.getRole());
             throw new RuntimeException("Role is invalid");
         }
+    }
+
+    @Override
+    public void delete(String id) {
+        validator.validateKey(id);
+        AuthUser user = repository.findById(id).orElseThrow(() -> {
+            throw new NotFoundException("User not found");
+        });
+        repository.delete(user);
     }
 
     @Override

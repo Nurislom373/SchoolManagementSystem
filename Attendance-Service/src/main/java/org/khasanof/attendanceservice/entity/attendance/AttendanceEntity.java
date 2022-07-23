@@ -1,10 +1,8 @@
 package org.khasanof.attendanceservice.entity.attendance;
 
 import lombok.*;
-import org.springframework.data.annotation.Id;
+import org.khasanof.attendanceservice.entity.Auditable;
 import org.springframework.data.mongodb.core.mapping.Document;
-
-import java.sql.Date;
 
 @Getter
 @Setter
@@ -12,10 +10,8 @@ import java.sql.Date;
 @NoArgsConstructor
 @ToString
 @Document(collection = "attendance")
-public class AttendanceEntity {
-    @Id
-    private String id;
-    private Date date;
+public class AttendanceEntity extends Auditable {
+    private String date;
     private String studentId;
     private String status;
     private String remarks;

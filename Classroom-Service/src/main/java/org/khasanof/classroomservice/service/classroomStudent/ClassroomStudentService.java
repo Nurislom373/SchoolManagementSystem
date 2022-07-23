@@ -89,4 +89,14 @@ public class ClassroomStudentService extends AbstractService<ClassroomStudentRep
     public Long count() {
         return repository.count();
     }
+
+    public void deleteUserId(String id) {
+        validator.validateKey(id);
+        List<ClassroomStudent> list = repository.findAllByStudentIdEquals(id);
+        if (list.isEmpty()) {
+            throw new NotFoundException("Classroom Student not found");
+        } else {
+            repository.deleteAll(list);
+        }
+    }
 }

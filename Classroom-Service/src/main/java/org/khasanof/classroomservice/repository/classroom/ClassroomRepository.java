@@ -9,6 +9,7 @@ import org.springframework.data.mongodb.repository.Query;
 import org.springframework.data.querydsl.QuerydslPredicateExecutor;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -22,4 +23,9 @@ public interface ClassroomRepository extends MongoRepository<Classroom, String>,
 
     @Query("{ 'year' : {$gt: ?1, $lt: ?2} }")
     List<Classroom> findAll(String key, Integer min, Integer max);
+
+    @Transactional
+    Void deleteAllByTeacherIdEquals(String teacherId);
+
+    List<Classroom> findAllByTeacherIdEquals(String teacherId);
 }

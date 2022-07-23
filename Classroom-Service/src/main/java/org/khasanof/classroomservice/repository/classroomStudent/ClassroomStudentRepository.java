@@ -12,4 +12,6 @@ public interface ClassroomStudentRepository extends MongoRepository<ClassroomStu
     List<ClassroomStudent> findAllByClassroomIdEquals(String id);
 
     ClassroomStudent findByClassroomIdAndStudentIdEquals(String classroomId, String studentId);
+
+    List<ClassroomStudent> findAllByStudentIdEquals(String studentId);
 }

@@ -43,6 +43,12 @@ public class ClassroomController extends AbstractController<ClassroomService> {
         return new ResponseEntity<>(new Data<>("Successfully Deleted - Classroom"), HttpStatus.OK);
     }
 
+    @RequestMapping(value = "delete/userId={id}", method = RequestMethod.DELETE)
+    public ResponseEntity<Data<String>> deleteUserId(@PathVariable String id) {
+        service.deleteUserId(id);
+        return new ResponseEntity<>(new Data<>("Successfully Deleted - Classroom"), HttpStatus.OK);
+    }
+
     @RequestMapping(value = "get/{id}", method = RequestMethod.GET)
     public ResponseEntity<Data<ClassroomGetVO>> get(@PathVariable String id) {
         return new ResponseEntity<>(new Data<>(service.get(id)), HttpStatus.OK);

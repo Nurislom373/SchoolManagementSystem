@@ -37,7 +37,13 @@ public class AuthUserController extends AbstractController<AuthUserService> {
         return new ResponseEntity<>(new Data<>("Successfully Registered"), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/get/student/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "delete/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<Data<String>> delete(@PathVariable String id) {
+        service.delete(id);
+        return new ResponseEntity<>(new Data<>("Successfully Deleted"), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "get/student/{id}", method = RequestMethod.GET)
     public ResponseEntity<Data<StudentGetDTO>> studentGet(@PathVariable String id) {
         return new ResponseEntity<>(new Data<>(service.studentGet(id)), HttpStatus.OK);
     }

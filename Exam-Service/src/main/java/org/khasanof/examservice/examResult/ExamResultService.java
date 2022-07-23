@@ -86,4 +86,8 @@ public class ExamResultService {
                         .doOnNext(p -> p.setId(id)))
                 .flatMap(repository::save);
     }
+
+    public Mono<Void> deleteUser(String id) {
+        return repository.deleteAllByStudentIdEquals(id);
+    }
 }
