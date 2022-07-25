@@ -2,6 +2,10 @@ package org.khasanof.attendanceservice.utils;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.boot.configurationprocessor.json.JSONObject;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;

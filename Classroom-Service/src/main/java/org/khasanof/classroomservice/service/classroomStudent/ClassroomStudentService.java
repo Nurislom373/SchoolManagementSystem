@@ -99,4 +99,13 @@ public class ClassroomStudentService extends AbstractService<ClassroomStudentRep
             repository.deleteAll(list);
         }
     }
+
+    public void deleteClassroomId(String id) {
+        validator.validateKey(id);
+        List<ClassroomStudent> list = repository.findAllByClassroomIdEquals(id);
+        if (list.isEmpty()) {
+            throw new NotFoundException("Classroom Student not found");
+        }
+        repository.deleteAll(list);
+    }
 }

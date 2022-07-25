@@ -48,6 +48,15 @@ public class CourseService extends AbstractService<CourseRepository, CourseMappe
         }));
     }
 
+    public void deleteGradeId(String id) {
+        validator.validateKey(id);
+        List<Course> all = repository.findAllByGradeIdEquals(id);
+        if (all.isEmpty()) {
+            throw new NotFoundException("Grade not found");
+        }
+        repository.deleteAll(all);
+    }
+
     public CourseGetVO get(String id) {
         validator.validateKey(id);
         return mapper.fromGetVO(repository.findById(id).orElseThrow(() -> {

@@ -17,6 +17,8 @@ public interface ExamResultRepository extends ReactiveMongoRepository<ExamResult
     @Transactional
     Mono<Void> deleteById(String id);
 
+    Mono<Void> deleteAllByExamId(String id);
+
     Flux<ExamResult> findAllByStudentIdEquals(String id);
 
     Mono<Void> deleteAllByStudentIdEquals(String id);

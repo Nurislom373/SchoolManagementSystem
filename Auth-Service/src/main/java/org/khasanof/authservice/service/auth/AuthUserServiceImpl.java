@@ -20,6 +20,9 @@ import org.khasanof.authservice.validator.auth.AuthUserValidator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.webjars.NotFoundException;
 
@@ -93,6 +96,10 @@ public class AuthUserServiceImpl extends AbstractService<AuthUserRepository, Aut
         AuthUser user = repository.findById(id).orElseThrow(() -> {
             throw new NotFoundException("User not found");
         });
+        ResponseEntity<String> attendanceResponse = BaseUtils.sendUrl("http://localhost:8006/api/v1/attendance/delete/userId=" + user.getId(), HttpMethod.DELETE, MediaType.APPLICATION_JSON);
+        ResponseEntity<String> classroomResponse = BaseUtils.sendUrl("http://localhost:8005/api/v1/classroom/delete/userId=" + user.getId(), HttpMethod.DELETE, MediaType.APPLICATION_JSON);
+        ResponseEntity<String> classroomStudentResponse = BaseUtils.sendUrl("http://localhost:8005/api/v1/classroomStudent/delete/userId=" + user.getId(), HttpMethod.DELETE, MediaType.APPLICATION_JSON);
+        ResponseEntity<String> examResultResponse = BaseUtils.sendUrl("http://localhost:8001/exam_result/delete/userId=" + user.getId(), HttpMethod.DELETE, MediaType.APPLICATION_JSON);
         repository.delete(user);
     }
 

@@ -5,6 +5,7 @@ import org.khasanof.classroomservice.domain.classroom.Classroom;
 import org.khasanof.classroomservice.mapper.classroom.ClassroomMapper;
 import org.khasanof.classroomservice.repository.classroom.ClassroomRepository;
 import org.khasanof.classroomservice.service.AbstractService;
+import org.khasanof.classroomservice.service.classroomStudent.ClassroomStudentService;
 import org.khasanof.classroomservice.utils.BaseUtils;
 import org.khasanof.classroomservice.validator.classroom.ClassroomValidator;
 import org.khasanof.classroomservice.vo.classroom.ClassroomCreateVO;
@@ -25,10 +26,12 @@ import java.util.List;
 public class ClassroomService extends AbstractService<ClassroomRepository, ClassroomMapper, ClassroomValidator> {
 
     private final ClassroomServiceClient client;
+    private final ClassroomStudentService studentService;
 
-    public ClassroomService(ClassroomRepository repository, ClassroomMapper mapper, ClassroomValidator validator, ClassroomServiceClient client) {
+    public ClassroomService(ClassroomRepository repository, ClassroomMapper mapper, ClassroomValidator validator, ClassroomServiceClient client, ClassroomStudentService studentService) {
         super(repository, mapper, validator);
         this.client = client;
+        this.studentService = studentService;
     }
 
     public void create(ClassroomCreateVO vo) {
@@ -50,6 +53,7 @@ public class ClassroomService extends AbstractService<ClassroomRepository, Class
         Classroom classroom = repository.findById(id).orElseThrow(() -> {
             throw new NotFoundException("Classroom not found");
         });
+        studentService.deleteClassroomId(classroom.getId());
         repository.delete(classroom);
     }
 
@@ -61,6 +65,15 @@ public class ClassroomService extends AbstractService<ClassroomRepository, Class
         } else {
             repository.deleteAll(list);
         }
+    }
+
+    public void deleteGradeId(String id) {
+        validator.validateKey(id);
+        List<Classroom> list = repository.findAllByGradeIdEquals(id);
+        if (list.isEmpty()) {
+            throw new NotFoundException("Classroom not found");
+        }
+        repository.deleteAll(list);
     }
 
     public ClassroomGetVO get(String id) {

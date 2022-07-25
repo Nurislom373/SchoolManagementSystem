@@ -65,6 +65,10 @@ public class ExamResultService {
         }).flatMap(repository::delete);
     }
 
+    public Mono<Void> deleteExamId(String id) {
+        return repository.deleteAllByExamId(id);
+    }
+
     public Mono<ExamResultGetDTO> get(String id) {
         return repository.findById(id)
                 .flatMap(obj -> {

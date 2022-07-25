@@ -28,4 +28,6 @@ public interface ClassroomRepository extends MongoRepository<Classroom, String>,
     Void deleteAllByTeacherIdEquals(String teacherId);
 
     List<Classroom> findAllByTeacherIdEquals(String teacherId);
+
+    List<Classroom> findAllByGradeIdEquals(String id);
 }
