@@ -1,11 +1,9 @@
 # SchoolManagementSystem
 
+[![](https://tokei.rs/b1/github/Nurislom373/SchoolManagementSystem)](https://github.com/Nurislom373/SchoolManagementSystem)
+[![](https://tokei.rs/b1/github/Nurislom373/SchoolManagementSystem?category=files)](https://github.com/Nurislom373/SchoolManagementSystem)
 
-Total Lines 
-[![](https://tokei.rs/b1/github/Nurislom373/SchoolManagementSystem)](https://github.com/Nurislom373/SchoolManagementSystem).
-
-Total Files
-[![](https://tokei.rs/b1/github/Nurislom373/SchoolManagementSystem?category=files)](https://github.com/Nurislom373/SchoolManagementSystem).
+Document management for schools or otherwise, is the creation, control, and conservation of pieces of information. Schools tend to develop an amazing array of documents, ranging from student papers and records of grades, attendance and behavior up through overall curriculum alignment and financial management.
 
 ## What are Document Management Systems and How Can They Be Used in the School Setting?
 
