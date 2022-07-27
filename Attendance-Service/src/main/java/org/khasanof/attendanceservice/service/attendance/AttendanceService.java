@@ -84,8 +84,12 @@ public class AttendanceService {
         List<AttendanceEntity> all = repository.findAllByStudentIdEquals(id);
         if (all.isEmpty()) {
             throw new NotFoundException("Attendance not found");
-        } else {
-            repository.deleteAll(all);
         }
+        repository.deleteAll(all);
+    }
+
+    public List<AttendanceGetDTO> listStudent(String id) {
+        validator.validOnKey(id);
+        return mapper.fromGetListDTO(repository.findAllByStudentIdEquals(id));
     }
 }

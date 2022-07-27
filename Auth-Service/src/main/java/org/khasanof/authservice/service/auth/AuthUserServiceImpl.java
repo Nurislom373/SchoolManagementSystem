@@ -12,7 +12,6 @@ import org.khasanof.authservice.entity.auth.AuthUser;
 import org.khasanof.authservice.enums.authentication.LoginEnums;
 import org.khasanof.authservice.mapper.auth.AuthUserMapper;
 import org.khasanof.authservice.repository.auth.AuthUserRepository;
-import org.khasanof.authservice.response.Data;
 import org.khasanof.authservice.service.AbstractService;
 import org.khasanof.authservice.utils.BaseUtils;
 import org.khasanof.authservice.utils.jwt.JwtUtils;
@@ -32,10 +31,13 @@ import java.util.List;
 @Service
 public class AuthUserServiceImpl extends AbstractService<AuthUserRepository, AuthUserMapper, AuthUserValidator> implements AuthUserService {
 
+    private final AuthUserProducerService producerService;
     Logger logger = LoggerFactory.getLogger(AuthUserServiceImpl.class);
 
-    public AuthUserServiceImpl(AuthUserRepository repository, AuthUserMapper mapper, AuthUserValidator validator) {
+
+    public AuthUserServiceImpl(AuthUserRepository repository, AuthUserMapper mapper, AuthUserValidator validator, AuthUserProducerService producerService) {
         super(repository, mapper, validator);
+        this.producerService = producerService;
     }
 
     @Override
@@ -96,10 +98,7 @@ public class AuthUserServiceImpl extends AbstractService<AuthUserRepository, Aut
         AuthUser user = repository.findById(id).orElseThrow(() -> {
             throw new NotFoundException("User not found");
         });
-        ResponseEntity<String> attendanceResponse = BaseUtils.sendUrl("http://localhost:8006/api/v1/attendance/delete/userId=" + user.getId(), HttpMethod.DELETE, MediaType.APPLICATION_JSON);
-        ResponseEntity<String> classroomResponse = BaseUtils.sendUrl("http://localhost:8005/api/v1/classroom/delete/userId=" + user.getId(), HttpMethod.DELETE, MediaType.APPLICATION_JSON);
-        ResponseEntity<String> classroomStudentResponse = BaseUtils.sendUrl("http://localhost:8005/api/v1/classroomStudent/delete/userId=" + user.getId(), HttpMethod.DELETE, MediaType.APPLICATION_JSON);
-        ResponseEntity<String> examResultResponse = BaseUtils.sendUrl("http://localhost:8001/exam_result/delete/userId=" + user.getId(), HttpMethod.DELETE, MediaType.APPLICATION_JSON);
+        producerService.sendMessage(user.getId());
         repository.delete(user);
     }
 

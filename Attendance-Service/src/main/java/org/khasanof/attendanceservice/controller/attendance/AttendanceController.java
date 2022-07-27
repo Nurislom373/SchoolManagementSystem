@@ -67,4 +67,9 @@ public class AttendanceController {
         return new ResponseEntity<>(new Data<>(service.list(status)), HttpStatus.OK);
     }
 
+    @RequestMapping(value = "list/studentId={id}", method = RequestMethod.GET)
+    public ResponseEntity<Data<List<AttendanceGetDTO>>> listStudent(@PathVariable String id) {
+        return new ResponseEntity<>(new Data<>(service.listStudent(id)), HttpStatus.OK);
+    }
+
 }

@@ -57,3 +57,8 @@ springdoc:
     path: /ui
   api-docs:
     path: /api-docs
+
+# kafka
+kafka:
+  server: localhost:9092
+  group-id: 0

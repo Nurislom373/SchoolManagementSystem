@@ -6,6 +6,7 @@ import org.khasanof.examservice.exam.dto.ExamGetDTO;
 import org.khasanof.examservice.exam.dto.ExamUpdateDTO;
 import org.khasanof.examservice.exam.entity.Exam;
 import org.khasanof.examservice.examResult.ExamResultService;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.server.ServerResponse;
 import reactor.core.publisher.Flux;
@@ -19,7 +20,6 @@ public class ExamService {
 
     private final ExamMapper mapper;
 
-    private final ExamResultService resultService;
     private final ExamRepository repository;
 
     public Mono<ExamGetDTO> save(Mono<ExamCreateDTO> mono) {
