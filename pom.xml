@@ -19,6 +19,7 @@
         <module>Exam-Service</module>
         <module>Classroom-Service</module>
         <module>Attendance-Service</module>
+        <module>Gateway-service</module>
     </modules>
 
 </project>

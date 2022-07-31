@@ -1,6 +1,7 @@
 package org.khasanof.classroomservice.controller.classroomStudent;
 
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
+import io.github.resilience4j.retry.annotation.Retry;
 import org.khasanof.classroomservice.controller.AbstractController;
 import org.khasanof.classroomservice.criteria.classroomStudent.ClassroomStudentCriteria;
 import org.khasanof.classroomservice.response.Data;
@@ -14,11 +15,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.Date;
 import java.util.List;
 
 @RestController
 @RequestMapping(value = BaseUtils.PATH + "/classroomStudent/*")
 public class ClassroomStudentController extends AbstractController<ClassroomStudentService> {
+
+    private int attempt = 1;
 
     public ClassroomStudentController(ClassroomStudentService service) {
         super(service);
@@ -48,8 +52,9 @@ public class ClassroomStudentController extends AbstractController<ClassroomStud
     }
 
     @RequestMapping(value = "detail/{id}", method = RequestMethod.GET)
-    @CircuitBreaker(name = BaseUtils.AUTH_SERVICE, fallbackMethod = "failMethod")
+    @Retry(name = BaseUtils.AUTH_SERVICE, fallbackMethod = "failMethod")
     public ResponseEntity<Data<ClassroomStudentDetailVO>> detail(@PathVariable String id) {
+        System.out.println("retry method called " + attempt++ + " times " + " at " + new Date());
         return new ResponseEntity<>(new Data<>(service.detail(id)), HttpStatus.OK);
     }
 
